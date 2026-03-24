@@ -23,9 +23,10 @@ Liste non exhaustive des « bonus »:
 - Hache : Met fin à la partie (brise le globe).
 
 ## Moodboard
-![a](./docs/media/moodboard.png)
+![Moodboard](./docs/media/moodboard.png)
 
 ## Carte visuelle
-![a](./docs/media/carte.png)
+![Carte](./docs/media/carte.png)
 
 ## Schéma de programmation
+![Schéma](./docs/media/prog_graph.png)
