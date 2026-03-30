@@ -1,0 +1,30 @@
+[
+	{
+		"id": "shadowrealm",
+		"adjacencies": [
+			"land1",
+			"land2"
+		]
+	},
+	{
+		"id": "land1",
+		"adjacencies": [
+			"shadowrealm",
+			"land3"
+		]
+	},
+	{
+		"id": "land2",
+		"adjacencies": [
+			"shadowrealm",
+			"land3"
+		]
+	},
+	{
+		"id": "land3",
+		"adjacencies": [
+			"land1",
+			"land2"
+		]
+	}
+]
