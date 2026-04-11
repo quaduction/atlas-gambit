@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GRData
+public static class GRData
 {
-    public static TerritoryDataList territoryData = JLoader<TerritoryDataList>.load("territories");
+    public static readonly TerritoryDataList territoryData = JLoader<TerritoryDataList>.load("territories");
 }
