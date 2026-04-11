@@ -61,7 +61,7 @@ public class GRMath
         return minAdv + (normalized * (maxAdv - minAdv));
     }
 
-    public static float advantageDice(uint sides = 6, uint amount = 1, float width, float bias)
+    public static float advantageDice(uint sides, uint amount, float width, float bias)
     {
         return toAdvantage(dice(sides, amount), sides, amount, width, bias);
     }
