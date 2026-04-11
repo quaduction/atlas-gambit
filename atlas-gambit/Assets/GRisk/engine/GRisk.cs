@@ -2,109 +2,181 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 
 public class GRisk
 {
-	public Dictionary<string, uint[]> boardState = new Dictionary<string, uint[]>();
+    public Dictionary<string, uint[]> boardState = new Dictionary<string, uint[]>();
 
-	Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
-	
-	List<uint> players = new List<uint>();
-	int currentPlayerIndex = 0;
+    Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
 
-	public GRisk()
-	{
-		foreach (string id in territoryData.Keys)
-		{
-			boardState[id] = new uint[]
-			{
-				0, // manpower (0 is "nothing")
-				0 // owner (0 is unclaimed)
-			};
-		}
-	}
+    List<uint> players = new List<uint>();
+    int currentPlayerIndex = 0;
 
-	public void registerPlayer(uint playerId)
-	{
-		if (playerId == 0) return; // reserved
-		if (!players.Contains(playerId))
-		{
-			players.Add(playerId);
-		}
-	}
+    public GRisk()
+    {
+        foreach (string id in territoryData.Keys)
+        {
+            boardState[id] = new uint[]
+            {
+                0, // manpower (0 is "nothing")
+                0, // owner (0 is unclaimed)
+            };
+        }
+    }
 
-	public void nextTurn()
-	{
-		if (players.Count == 0) return;
-		currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
-	}
+    public void registerPlayer(uint playerId)
+    {
+        if (playerId == 0)
+            return; // reserved
 
-	bool tilesAdjacent(string fromId, string toId)
-	{
-		TerritoryData data = territoryData[fromId];
-		return data.adjacencies.Contains(toId);
-	}
+        if (!players.Contains(playerId))
+        {
+            players.Add(playerId);
+        }
+    }
 
-	bool tilesAdjacentBidirectional(string fromId, string toId)
-	{
-		return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
-	}
+    public void nextTurn()
+    {
+        if (players.Count == 0)
+            return;
 
-	uint manpowerAt(string id)
-	{
-		return boardState[id][0];
-	}
-	
-	uint ownerAt(string id)
-	{
-		return boardState[id][1];
-	}
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
+    }
 
-	uint setOwnerAt(string id, uint owner)
-	{
-		return boardState[id][1] = owner;
-	}
+    bool tilesAdjacent(string fromId, string toId)
+    {
+        TerritoryData data = territoryData[fromId];
 
-	void conformOwnerAt(string id)
-	{
-		if (manpowerAt(id) == 0) setOwnerAt(id, 0);
-	}
+        if (data.adjacencies.Contains("*"))
+            return true;
 
-	uint setManpowerAt(string id, uint manpower)
-	{
-		boardState[id][0] = manpower;
-		
-		conformOwnerAt(id);
-		
-		return manpower;
-	}
+        return data.adjacencies.Contains(toId);
+    }
 
-	uint addManpowerAt(string id, uint manpower)
-	{
-		uint current = manpowerAt(id);
-		uint maxAdd = uint.MaxValue - current;
-		uint added = Math.Min(manpower, maxAdd);
-		
-		setManpowerAt(id, current + added);
+    bool tilesAdjacentBidirectional(string fromId, string toId)
+    {
+        return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
+    }
 
-		return added;
-	}
+    uint manpowerAt(string id)
+    {
+        return boardState[id][0];
+    }
 
-	uint subManpowerAt(string id, uint manpower)
-	{
-		uint current = manpowerAt(id);
-		uint removed = Math.Min(manpower, current);
-		
-		setManpowerAt(id, current - removed);
+    uint ownerAt(string id)
+    {
+        return boardState[id][1];
+    }
 
-		return removed;
-	}
+    uint setOwnerAt(string id, uint owner)
+    {
+        return boardState[id][1] = owner;
+    }
 
-	uint moveManpower(string fromId, string toId, uint manpower)
-	{
-		return addManpowerAt(toId, subManpowerAt(fromId, manpower));
-	}
-	
+    void conformOwnerAt(string id)
+    {
+        if (manpowerAt(id) == 0)
+            setOwnerAt(id, 0);
+    }
+
+    uint setManpowerAt(string id, uint manpower)
+    {
+        boardState[id][0] = manpower;
+
+        conformOwnerAt(id);
+
+        return manpower;
+    }
+
+    uint addManpowerAt(string id, uint manpower)
+    {
+        uint current = manpowerAt(id);
+        uint maxAdd = uint.MaxValue - current;
+        uint added = Math.Min(manpower, maxAdd);
+
+        setManpowerAt(id, current + added);
+
+        return added;
+    }
+
+    uint subManpowerAt(string id, uint manpower)
+    {
+        uint current = manpowerAt(id);
+        uint removed = Math.Min(manpower, current);
+
+        setManpowerAt(id, current - removed);
+
+        return removed;
+    }
+
+    uint moveManpower(string fromId, string toId, uint manpower)
+    {
+        return addManpowerAt(toId, subManpowerAt(fromId, manpower));
+    }
+
+    public bool canReinforce(string fromId, string toId, uint manpower, uint player)
+    {
+        return tilesAdjacent(fromId, toId)
+            && ownerAt(fromId) == ownerAt(toId)
+            && ownerAt(fromId) == player
+            && manpowerAt(fromId) >= manpower;
+    }
+
+    public uint reinforce(string fromId, string toId, uint manpower, uint player)
+    {
+        if (!canReinforce(fromId, toId, manpower, player))
+            return 0;
+
+        return moveManpower(fromId, toId, manpower);
+    }
+
+    public bool canAttack(string fromId, string toId, uint manpower, uint player)
+    {
+        return tilesAdjacent(fromId, toId)
+            && ownerAt(fromId) == player
+            && ownerAt(toId) != player
+            && manpowerAt(fromId) >= manpower;
+    }
+
+    public uint attack(string fromId, string toId, uint manpower, uint player)
+    {
+        if (!canAttack(fromId, toId, manpower, player))
+            return 0;
+
+        bool captures = manpowerAt(fromId) > manpowerAt(toId);
+
+        uint[] outcome = skirmish(manpower, manpowerAt(toId));
+        uint remainder = outcome[0];
+        uint captureType = outcome[1];
+
+        return 0;
+    }
+
+    public uint[] skirmish(uint atkManpower, uint defManpower, float advantage = 1f)
+    {
+
+        uint effectiveAtk = GRMath.scaleTo(atkManpower, advantage);
+
+        bool wins = effectiveAtk > defManpower;
+
+        uint effectiveOutcome = GRMath.difference(effectiveAtk, defManpower);
+        uint remainder = wins ? GRMath.scaleFrom(effectiveOutcome, advantage) : effectiveOutcome;
+
+        bool captures = remainder > 0;
+        uint captureMode = wins && captures
+            ? 0 // wins and captures: attacker win
+            : captures
+                ? 2 // wins and doesn't capture: mutual destruction
+                : 1; // doesn't win and doesn't capture: defender win
+
+        // unfinished, should take into account the advantage to scale, calculate, and return new values for the result of the skirmish.
+        // might need to switch away from uint[] since an attack will always end with one troop unit being completely gone
+        // (even if there's 100 vs 100, <1 advantage could make it an effective 100 vs 120, ending in 0 and 20, for a defender win)
+        return uint[]
+        {
+            remainder,
+            captureMode
+        };
+    }
 }
