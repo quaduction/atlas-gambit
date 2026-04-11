@@ -161,10 +161,10 @@ public class GRisk
 
         bool captures = remainder > 0;
         uint captureMode = wins && captures
-            ? 0 // wins and captures: attacker win
+            ? 0u // wins and captures: attacker win
             : captures
-                ? 2 // wins and doesn't capture: mutual destruction
-                : 1; // doesn't win and doesn't capture: defender win
+                ? 2u // wins and doesn't capture: mutual destruction
+                : 1u; // doesn't win and doesn't capture: defender win
 
         return new uint[]
         {
