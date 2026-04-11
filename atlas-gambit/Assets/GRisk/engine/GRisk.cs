@@ -144,8 +144,6 @@ public class GRisk
         if (!canAttack(fromId, toId, manpower, player))
             return 0;
 
-        bool captures = manpowerAt(fromId) > manpowerAt(toId);
-
         uint[] outcome = skirmish(manpower, manpowerAt(toId));
         uint remainder = outcome[0];
         uint captureType = outcome[1];
