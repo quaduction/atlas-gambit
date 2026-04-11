@@ -7,6 +7,8 @@ using UnityEngine;
 public class TerritoryData
 {
     public string id;
+    public string name;
+    public string continent;
     public string[] adjacencies;
 }
 
