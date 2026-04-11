@@ -170,13 +170,9 @@ public class GRisk
                 ? 2 // wins and doesn't capture: mutual destruction
                 : 1; // doesn't win and doesn't capture: defender win
 
-        // unfinished, should take into account the advantage to scale, calculate, and return new values for the result of the skirmish.
-        // might need to switch away from uint[] since an attack will always end with one troop unit being completely gone
-        // (even if there's 100 vs 100, <1 advantage could make it an effective 100 vs 120, ending in 0 and 20, for a defender win)
-        return uint[]
-        {
+        return [
             remainder,
             captureMode
-        };
+        ];
     }
 }
