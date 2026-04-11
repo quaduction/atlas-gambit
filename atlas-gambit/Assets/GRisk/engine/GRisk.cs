@@ -166,9 +166,11 @@ public class GRisk
                 ? 2 // wins and doesn't capture: mutual destruction
                 : 1; // doesn't win and doesn't capture: defender win
 
-        return [
+        return new uint[]
+        {
             remainder,
             captureMode
-        ];
+        }
+        ;
     }
 }
