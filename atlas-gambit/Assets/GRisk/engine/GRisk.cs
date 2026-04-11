@@ -6,7 +6,7 @@ public class GRisk
 {
     public Dictionary<string, uint[]> boardState = new Dictionary<string, uint[]>();
 
-    Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
+    private Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
 
     List<uint> players = new List<uint>();
     int currentPlayerIndex = 0;
