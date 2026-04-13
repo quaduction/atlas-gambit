@@ -1,4 +1,9 @@
-public static class GRData
+using GRisk.Util;
+
+namespace GRisk
 {
-    public static readonly TerritoryDataList territoryData = JLoader<TerritoryDataList>.load("territories");
+    public static class GRData
+    {
+        public static readonly TerritoryDataList territoryData = JLoader<TerritoryDataList>.load("territories");
+    }
 }

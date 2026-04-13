@@ -1,28 +1,31 @@
 using System;
 using System.Collections.Generic;
 
-[Serializable]
-public class TerritoryData
+namespace GRisk
 {
-    public string id;
-    public string name;
-    public string continent;
-    public string[] adjacencies;
-}
-
-[Serializable]
-public class TerritoryDataList
-{
-    public TerritoryData[] territories;
-
-    public Dictionary<string, TerritoryData> asDict()
+    [Serializable]
+    public class TerritoryData
     {
-        Dictionary<string, TerritoryData> terrDict = new Dictionary<string, TerritoryData>();
-        foreach (TerritoryData territory in territories)
-        {
-            terrDict[territory.id] = territory;
-        }
+        public string id;
+        public string name;
+        public string continent;
+        public string[] adjacencies;
+    }
 
-        return terrDict;
+    [Serializable]
+    public class TerritoryDataList
+    {
+        public TerritoryData[] territories;
+
+        public Dictionary<string, TerritoryData> asDict()
+        {
+            Dictionary<string, TerritoryData> terrDict = new Dictionary<string, TerritoryData>();
+            foreach (TerritoryData territory in territories)
+            {
+                terrDict[territory.id] = territory;
+            }
+
+            return terrDict;
+        }
     }
 }
