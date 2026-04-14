@@ -7,12 +7,13 @@ namespace GRisk.Engine
 {
     public class GR
     {
-        public Dictionary<string, uint[]> boardState = new Dictionary<string, uint[]>();
+        public Dictionary<string, uint[]> boardState = new();
 
         private Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
 
-        List<uint> players = new List<uint>();
-        int currentPlayerIndex = 0;
+        List<uint> players;
+        int currentPlayerIndex;
+        int currentPhaseIndex;
 
         public GR()
         {
@@ -21,14 +22,14 @@ namespace GRisk.Engine
                 boardState[id] = new uint[]
                 {
                     0, // manpower (0 is "nothing")
-                    0, // owner (0 is unclaimed)
+                    (uint)GRTypes.Player.NONE, // owner (0 is unclaimed)
                 };
             }
         }
 
         public void registerPlayer(uint playerId)
         {
-            if (playerId == 0)
+            if (playerId == (uint)GRTypes.Player.NONE)
                 return; // reserved
 
             if (!players.Contains(playerId))
@@ -37,8 +38,28 @@ namespace GRisk.Engine
             }
         }
 
+        public uint currentPlayer()
+        {
+            return players[currentPlayerIndex];
+        }
+
+        public GRTypes.Phase currentPhase()
+        {
+            return (GRTypes.Phase)currentPhaseIndex;
+        }
+
+        public bool nextPhase()
+        {
+            if (currentPhaseIndex < (int)GRTypes.Phase.END) currentPhaseIndex++;
+
+            // if true, "end of the roll" -- nothing more can be done in this turn
+            return currentPhaseIndex == (int)GRTypes.Phase.END;
+        }
+
         public void nextTurn()
         {
+            currentPhaseIndex = 0;
+
             if (players.Count == 0)
                 return;
 
@@ -118,7 +139,8 @@ namespace GRisk.Engine
 
         public bool canReinforce(string fromId, string toId, uint manpower, uint player)
         {
-            return tilesAdjacent(fromId, toId)
+            return currentPhaseIndex == (int)GRTypes.Phase.REINFORCE
+                   && tilesAdjacent(fromId, toId)
                    && ownerAt(fromId) == ownerAt(toId)
                    && ownerAt(fromId) == player
                    && manpowerAt(fromId) >= manpower;
@@ -134,7 +156,8 @@ namespace GRisk.Engine
 
         public bool canAttack(string fromId, string toId, uint manpower, uint player)
         {
-            return tilesAdjacent(fromId, toId)
+            return currentPhaseIndex == (int)GRTypes.Phase.ATTACK
+                   && tilesAdjacent(fromId, toId)
                    && ownerAt(fromId) == player
                    && ownerAt(toId) != player
                    && manpowerAt(fromId) >= manpower;
@@ -145,36 +168,11 @@ namespace GRisk.Engine
             if (!canAttack(fromId, toId, manpower, player))
                 return 0;
 
-            uint[] outcome = skirmish(manpower, manpowerAt(toId));
+            uint[] outcome = GRMath.skirmish(manpower, manpowerAt(toId));
             uint remainder = outcome[0];
             uint captureType = outcome[1];
 
             return 0;
-        }
-
-        public uint[] skirmish(uint atkManpower, uint defManpower, float advantage = 1f)
-        {
-
-            uint effectiveAtk = GRMath.scaleTo(atkManpower, advantage);
-
-            bool wins = effectiveAtk > defManpower;
-
-            uint effectiveOutcome = GRMath.difference(effectiveAtk, defManpower);
-            uint remainder = wins ? GRMath.scaleFrom(effectiveOutcome, advantage) : effectiveOutcome;
-
-            bool captures = remainder > 0;
-            uint captureMode = wins && captures
-                ? 0u // wins and captures: attacker win
-                : captures
-                    ? 2u // wins and doesn't capture: mutual destruction
-                    : 1u; // doesn't win and doesn't capture: defender win
-
-            return new uint[]
-                {
-                    remainder,
-                    captureMode
-                }
-                ;
         }
     }
 }

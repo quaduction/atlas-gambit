@@ -1,12 +1,15 @@
+using GRisk;
 using UnityEngine;
 using GRisk.Engine;
 
 public class GRiskTester : MonoBehaviour
 {
+    public GameMaster gameMaster;
     void Start()
     {
-        var gr = new GR();
+        GR gr = gameMaster.engine;
+        GRFacade g = gameMaster.facade;
         
-        Debug.Log(gr);
+        Debug.Log("Hello World");
     }
 }

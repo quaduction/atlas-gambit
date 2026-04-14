@@ -4,7 +4,7 @@ namespace GRisk.Util
 {
     public class GRMath
     {
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         public static uint dice(uint sides = 6, uint amount = 1)
         {
@@ -81,6 +81,29 @@ namespace GRisk.Util
         public static uint difference(uint a, uint b)
         {
             return a > b ? a - b : b - a;
+        }
+
+        public static uint[] skirmish(uint atkManpower, uint defManpower, float advantage = 1f)
+        {
+            uint effectiveAtk = scaleTo(atkManpower, advantage);
+
+            bool wins = effectiveAtk > defManpower;
+
+            uint effectiveOutcome = difference(effectiveAtk, defManpower);
+            uint remainder = wins ? scaleFrom(effectiveOutcome, advantage) : effectiveOutcome;
+
+            bool captures = remainder > 0;
+            uint captureMode = wins && captures
+                ? 0u // wins and captures: attacker win
+                : captures
+                    ? 2u // wins and doesn't capture: mutual destruction
+                    : 1u; // doesn't win and doesn't capture: defender win
+
+            return new[]
+            {
+                remainder,
+                captureMode
+            };
         }
     }
 }
