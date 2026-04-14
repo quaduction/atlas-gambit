@@ -5,7 +5,8 @@ using GRisk.Engine;
 public class GRiskTester : MonoBehaviour
 {
     public GameMaster gameMaster;
-    void Start()
+    
+    private void Start()
     {
         GR gr = gameMaster.engine;
         GRFacade g = gameMaster.facade;
