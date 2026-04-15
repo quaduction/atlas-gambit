@@ -79,19 +79,24 @@ namespace GRisk.Engine
             return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
         }
 
+        uint[] stateAt(string id)
+        {
+            return boardState[id];
+        }
+
         uint manpowerAt(string id)
         {
-            return boardState[id][0];
+            return stateAt(id)[0];
         }
 
         uint ownerAt(string id)
         {
-            return boardState[id][1];
+            return stateAt(id)[1];
         }
 
         uint setOwnerAt(string id, uint owner)
         {
-            return boardState[id][1] = owner;
+            return stateAt(id)[1] = owner;
         }
 
         void conformOwnerAt(string id)
@@ -102,7 +107,7 @@ namespace GRisk.Engine
 
         uint setManpowerAt(string id, uint manpower)
         {
-            boardState[id][0] = manpower;
+            stateAt(id)[0] = manpower;
 
             conformOwnerAt(id);
 
@@ -133,6 +138,11 @@ namespace GRisk.Engine
         uint moveManpower(string fromId, string toId, uint manpower)
         {
             return addManpowerAt(toId, subManpowerAt(fromId, manpower));
+        }
+
+        public uint draft(string id, uint manpower, uint player)
+        {
+            return addManpowerAt(id, manpower);
         }
 
         public bool canReinforce(string fromId, string toId, uint manpower, uint player)
