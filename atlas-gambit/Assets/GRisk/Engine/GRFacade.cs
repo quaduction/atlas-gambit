@@ -11,6 +11,11 @@ namespace GRisk.Engine
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange  = new();
 
+        public void check(string id)
+        {
+            
+        }
+        
         public void nextPhase()
         {
             bool endPhase = engine.nextPhase();
@@ -33,6 +38,16 @@ namespace GRisk.Engine
             turnChange.Invoke();
             
             Debug.Log($"It is now player {engine.currentPlayer()}'s turn");
+        }
+
+        public void draft(string id, uint manpower)
+        {
+            engine.draft(id, manpower, engine.currentPlayer());
+        }
+
+        public void move(string fromId, string toId, uint manpower)
+        {
+            
         }
     }
 }
