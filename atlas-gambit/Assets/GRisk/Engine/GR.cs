@@ -7,9 +7,7 @@ namespace GRisk.Engine
 {
     public class GR
     {
-        public Dictionary<string, uint[]> boardState = new();
-
-        private Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
+        private Dictionary<string, uint[]> boardState = new();
 
         List<uint> players;
         int currentPlayerIndex;
@@ -17,7 +15,7 @@ namespace GRisk.Engine
 
         public GR()
         {
-            foreach (string id in territoryData.Keys)
+            foreach (string id in GRData.territoryDict.Keys)
             {
                 boardState[id] = new uint[]
                 {
@@ -68,7 +66,7 @@ namespace GRisk.Engine
 
         bool tilesAdjacent(string fromId, string toId)
         {
-            TerritoryData data = territoryData[fromId];
+            TerritoryData data = GRData.territoryDict[fromId];
 
             if (data.adjacencies.Contains("*"))
                 return true;
