@@ -79,17 +79,17 @@ namespace GRisk.Engine
             return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
         }
 
-        uint[] stateAt(string id)
+        public uint[] stateAt(string id)
         {
             return boardState[id];
         }
 
-        uint manpowerAt(string id)
+        public uint manpowerAt(string id)
         {
             return stateAt(id)[0];
         }
 
-        uint ownerAt(string id)
+        public uint ownerAt(string id)
         {
             return stateAt(id)[1];
         }
