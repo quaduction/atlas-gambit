@@ -7,9 +7,7 @@ namespace GRisk.Engine
 {
     public class GR
     {
-        public Dictionary<string, uint[]> boardState = new();
-
-        private Dictionary<string, TerritoryData> territoryData = GRData.territoryData.asDict();
+        private Dictionary<string, uint[]> boardState = new();
 
         List<uint> players;
         int currentPlayerIndex;
@@ -17,7 +15,7 @@ namespace GRisk.Engine
 
         public GR()
         {
-            foreach (string id in territoryData.Keys)
+            foreach (string id in GRData.territoryDict.Keys)
             {
                 boardState[id] = new uint[]
                 {
@@ -68,7 +66,7 @@ namespace GRisk.Engine
 
         bool tilesAdjacent(string fromId, string toId)
         {
-            TerritoryData data = territoryData[fromId];
+            TerritoryData data = GRData.territoryDict[fromId];
 
             if (data.adjacencies.Contains("*"))
                 return true;
@@ -81,19 +79,24 @@ namespace GRisk.Engine
             return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
         }
 
-        uint manpowerAt(string id)
+        public uint[] stateAt(string id)
         {
-            return boardState[id][0];
+            return boardState[id];
         }
 
-        uint ownerAt(string id)
+        public uint manpowerAt(string id)
         {
-            return boardState[id][1];
+            return stateAt(id)[0];
+        }
+
+        public uint ownerAt(string id)
+        {
+            return stateAt(id)[1];
         }
 
         uint setOwnerAt(string id, uint owner)
         {
-            return boardState[id][1] = owner;
+            return stateAt(id)[1] = owner;
         }
 
         void conformOwnerAt(string id)
@@ -104,7 +107,7 @@ namespace GRisk.Engine
 
         uint setManpowerAt(string id, uint manpower)
         {
-            boardState[id][0] = manpower;
+            stateAt(id)[0] = manpower;
 
             conformOwnerAt(id);
 
@@ -135,6 +138,11 @@ namespace GRisk.Engine
         uint moveManpower(string fromId, string toId, uint manpower)
         {
             return addManpowerAt(toId, subManpowerAt(fromId, manpower));
+        }
+
+        public uint draft(string id, uint manpower, uint player)
+        {
+            return addManpowerAt(id, manpower);
         }
 
         public bool canReinforce(string fromId, string toId, uint manpower, uint player)
