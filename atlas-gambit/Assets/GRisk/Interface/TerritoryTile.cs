@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace GRisk.UI
+namespace GRisk.Interface
 {
     public class TerritoryTile : MonoBehaviour
     {
         public string territoryId;
+        public TileManager manager;
         
         public UnityEvent propPlaced;
         

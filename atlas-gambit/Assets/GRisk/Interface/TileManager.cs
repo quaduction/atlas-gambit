@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GRisk.UI
+namespace GRisk.Interface
 {
     public class TileManager : MonoBehaviour
     {
