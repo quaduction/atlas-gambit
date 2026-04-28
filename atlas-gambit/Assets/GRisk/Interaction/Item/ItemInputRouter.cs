@@ -9,6 +9,7 @@ namespace GRisk.Interaction.Item
         private ItemBehaviour behaviour;
 
         private XRBaseInteractor currentInteractor;
+        private ActionBasedController controller;
 
         void Awake()
         {
@@ -17,11 +18,21 @@ namespace GRisk.Interaction.Item
 
             grab.selectEntered.AddListener(OnGrab);
             grab.selectExited.AddListener(OnRelease);
+            
+            grab.activated.AddListener(OnActivate);
         }
 
         void OnGrab(SelectEnterEventArgs args)
         {
             currentInteractor = args.interactorObject as XRBaseInteractor;
+            Debug.Log("OnGrab");
+            Debug.Log(currentInteractor.transform.parent.name);
+            
+            if (currentInteractor == null) return;
+            
+            controller = currentInteractor.GetComponent<ActionBasedController>();
+            
+            Debug.Log(controller);
         }
 
         void OnRelease(SelectExitEventArgs args)
@@ -29,28 +40,34 @@ namespace GRisk.Interaction.Item
             currentInteractor = null;
         }
 
-        void Update()
+        public void OnActivate(ActivateEventArgs args)
         {
-            if (currentInteractor == null || behaviour == null) return;
-
-            XRController controller = currentInteractor.GetComponent<XRController>();
-
-            if (controller == null) return;
-
-            if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out bool trigger))
-            {
-                if (trigger) behaviour.onTrigger();
-            }
-
-            if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool a))
-            {
-                if (a) behaviour.onPrimary();
-            }
-
-            if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool b))
-            {
-                if (b) behaviour.onSecondary();
-            }
+            behaviour.onTrigger();
         }
+
+        // void Update()
+        // {
+        //     if (currentInteractor == null || behaviour == null) return;
+        //     
+        //
+        //     if (controller == null) return;
+        //     
+        //     controller.
+        //
+        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out bool trigger))
+        //     {
+        //         if (trigger) behaviour.onTrigger();
+        //     }
+        //
+        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool a))
+        //     {
+        //         if (a) behaviour.onPrimary();
+        //     }
+        //
+        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool b))
+        //     {
+        //         if (b) behaviour.onSecondary();
+        //     }
+        // }
     }
 }
