@@ -436,7 +436,7 @@ PrefabInstance:
     - target: {fileID: 7516487461861677552, guid: ddae704704cdb5316b9d95bf3aea0071,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.48
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7516487461861677552, guid: ddae704704cdb5316b9d95bf3aea0071,
         type: 3}
@@ -516,7 +516,7 @@ PrefabInstance:
     - target: {fileID: 8968538609256502800, guid: ddae704704cdb5316b9d95bf3aea0071,
         type: 3}
       propertyPath: m_Name
-      value: DebugStick 1
+      value: DebugStick
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7615442939649502238, guid: ddae704704cdb5316b9d95bf3aea0071, type: 3}
