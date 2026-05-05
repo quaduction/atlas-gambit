@@ -1,22 +1,70 @@
-﻿using UnityEngine;
+﻿using System;
+using GRisk.Engine;
+using GRisk.Interaction.Item;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace GRisk.Interface
 {
+    [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(MeshCollider))]
     public class TerritoryTile : MonoBehaviour
     {
         public string territoryId;
         public TileManager manager;
-        
-        public UnityEvent propPlaced;
-        
-        private uint manpower;
-        private uint owner;
+
+        private new MeshRenderer renderer;
+        private MeshCollider meshCollider;
+
+        private uint manpower = 0;
+        private uint owner = (uint)GRTypes.Player.NONE;
+        private bool focused = false;
+
+        private void Reset()
+        {
+            territoryId = name;
+        }
+
+        private void Awake()
+        {
+            renderer = GetComponent<MeshRenderer>();
+            meshCollider = GetComponent<MeshCollider>();
+        }
+
+        private void Start()
+        {
+            manager.registerTile(this);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("Tile Collided");
+            Debug.Log(collision.gameObject.name);
+
+            if (collision.gameObject.TryGetComponent(out ConsumableItemAttributes attributes))
+            {
+                manager.onConsumable(this, attributes);
+            }
+        }
 
         public void setState(uint[] state)
         {
             manpower = state[0];
             owner = state[1];
+
+            updateVisuals();
+        }
+
+        public void setFocus(bool focus)
+        {
+            focused = focus;
+
+            updateVisuals();
+        }
+
+        public void updateVisuals()
+        {
+            renderer.material.color = Color.white;
         }
     }
 }
