@@ -39,12 +39,9 @@ namespace GRisk.Interface
 
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("Tile Collided");
-            Debug.Log(collision.gameObject.name);
-
-            if (collision.gameObject.TryGetComponent(out ConsumableItemAttributes attributes))
+            if (collision.gameObject.TryGetComponent(out ConsumableItem consumable))
             {
-                manager.onConsumable(this, attributes);
+                manager.onConsumable(this, consumable);
             }
         }
 

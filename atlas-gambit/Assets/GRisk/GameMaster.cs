@@ -15,6 +15,7 @@ namespace GRisk
             engine = new GR();
             facade.engine = engine;
             tileManager.engine = engine;
+            tileManager.facade = facade;
         }
     }
 }

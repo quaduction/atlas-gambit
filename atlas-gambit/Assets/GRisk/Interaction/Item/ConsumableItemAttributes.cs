@@ -2,10 +2,14 @@
 
 namespace GRisk.Interaction.Item
 {
-    public class ConsumableItemAttributes : MonoBehaviour
+    [System.Serializable]
+    public struct ConsumableItemAttributes
     {
-        public bool isConsumed = true;
+        public int manpowerMut;
 
-        public int manpowerMut = 0;
+        public ConsumableItemAttributes(int? mpmut)
+        {
+            manpowerMut = mpmut ?? 0;
+        }
     }
 }

@@ -106,7 +106,7 @@ namespace GRisk.Engine
         }
 
         // [UTIL] Définir le propriétaire d'une province
-        uint setOwnerAt(string id, uint owner)
+        public uint setOwnerAt(string id, uint owner)
         {
             return stateAt(id)[1] = owner;
         }
@@ -129,7 +129,7 @@ namespace GRisk.Engine
 
         // [UTIL] Ajouter nombre de troupes sur une province. 
         // ID de la province + nombre de troupes à ajouter
-        uint addManpowerAt(string id, uint manpower)
+        public uint addManpowerAt(string id, uint manpower)
         {
             uint current = manpowerAt(id);
             uint maxAdd = uint.MaxValue - current;
@@ -141,7 +141,7 @@ namespace GRisk.Engine
         }
 
         // [UTIL] Soustraire le nombre de troupes
-        uint subManpowerAt(string id, uint manpower)
+        public uint subManpowerAt(string id, uint manpower)
         {
             uint current = manpowerAt(id);
             uint removed = Math.Min(manpower, current);

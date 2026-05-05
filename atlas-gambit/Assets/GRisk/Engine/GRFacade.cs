@@ -1,5 +1,6 @@
 using System;
 using GRisk.Data;
+using GRisk.Interaction.Item;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,7 +11,37 @@ namespace GRisk.Engine
         public GR engine;
 
         public UnityEvent phaseChange = new();
-        public UnityEvent turnChange  = new();
+        public UnityEvent turnChange = new();
+
+        public void handleConsumable(ConsumableItem consumable, string territoryId)
+        {
+            if (consumable.destroyOnConsume && consumable.consumed) return;
+            
+            consumable.territoryEffect(territoryId, engine);
+
+            if (consumable.checkOwnership && (uint)consumable.owner != engine.ownerAt(territoryId)) return;
+
+            if (consumable.attributes.manpowerMut != 0)
+            {
+                if (Math.Sign(consumable.attributes.manpowerMut) > 0)
+                {
+                    engine.addManpowerAt(territoryId, (uint)consumable.attributes.manpowerMut);
+                }
+                else
+                {
+                    engine.subManpowerAt(territoryId, (uint)consumable.attributes.manpowerMut);
+                }
+            }
+            
+            if(consumable.destroyOnConsume)
+            {
+                consumable.consumed = true;
+                Destroy(consumable.gameObject);
+            }
+        }
+
+
+        // older debug stuff for console testing
 
         public void check(string id)
         {
@@ -19,7 +50,7 @@ namespace GRisk.Engine
 
             Debug.Log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp");
         }
-        
+
         public void nextPhase()
         {
             bool endPhase = engine.nextPhase();
@@ -32,7 +63,7 @@ namespace GRisk.Engine
             {
                 Debug.Log($"{engine.currentPhase().ToString()} phase");
             }
-            
+
             phaseChange.Invoke();
         }
 
@@ -40,7 +71,7 @@ namespace GRisk.Engine
         {
             engine.nextTurn();
             turnChange.Invoke();
-            
+
             Debug.Log($"It is now player {engine.currentPlayer()}'s turn");
         }
 
@@ -60,6 +91,7 @@ namespace GRisk.Engine
                         Debug.Log("Invalid REINFORCE move (position, ownership, or manpower)");
                         break;
                     }
+
                     engine.reinforce(fromId, toId, manpower, player);
                     break;
 
@@ -69,6 +101,7 @@ namespace GRisk.Engine
                         Debug.Log("Invalid ATTACK move (position, ownership, or manpower)");
                         break;
                     }
+
                     engine.attack(fromId, toId, manpower, player);
                     break;
 
