@@ -1,4 +1,5 @@
 ﻿using System;
+using GRisk.Data;
 using GRisk.Engine;
 using GRisk.Interaction.Item;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace GRisk.Interface
 
         public void updateVisuals()
         {
-            renderer.material.color = Color.white;
+            renderer.material.color = GRData.playerStyleDict[owner].color;
         }
     }
 }
