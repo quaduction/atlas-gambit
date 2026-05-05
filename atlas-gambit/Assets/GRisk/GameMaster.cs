@@ -1,4 +1,5 @@
 using GRisk.Engine;
+using GRisk.Interface;
 using UnityEngine;
 
 namespace GRisk
@@ -7,11 +8,13 @@ namespace GRisk
     {
         public GR engine;
         public GRFacade facade;
+        public TileManager tileManager;
 
-        void Start()
+        private void Awake()
         {
             engine = new GR();
             facade.engine = engine;
+            tileManager.engine = engine;
         }
     }
 }
