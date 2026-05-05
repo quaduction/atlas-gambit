@@ -19,7 +19,7 @@ namespace GRisk.Data
 
         public Dictionary<string, TerritoryData> asDict()
         {
-            Dictionary<string, TerritoryData> terrDict = new Dictionary<string, TerritoryData>();
+            Dictionary<string, TerritoryData> terrDict = new();
             foreach (TerritoryData territory in territories)
             {
                 terrDict[territory.id] = territory;
