@@ -226,6 +226,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 909fe0449b844e498507d83e06c26436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  primaries:
+  - m_UseReference: 1
+    m_Action:
+      m_Name: Element 0
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: af801ad1-6e34-4a94-a57b-d7181d060477
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 5891963722052927393, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  - m_UseReference: 1
+    m_Action:
+      m_Name: Element 1
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4ede9c5f-ea56-44b0-a1d5-fee0e1db8af0
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 174293514108412092, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  secondaries:
+  - m_UseReference: 1
+    m_Action:
+      m_Name: Element 0
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: c211fbfa-5753-452b-8afc-04b551ffe31a
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -290891382229086687, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  - m_UseReference: 1
+    m_Action:
+      m_Name: Element 1
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: ebe2b5d5-8091-4fe8-a225-7739621c4e08
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -5812051954624844367, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
 --- !u!114 &7615442939649502238
 MonoBehaviour:
   m_ObjectHideFlags: 0

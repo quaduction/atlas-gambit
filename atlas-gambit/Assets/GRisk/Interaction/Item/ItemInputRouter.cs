@@ -1,73 +1,89 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace GRisk.Interaction.Item
 {
+    [RequireComponent(typeof(XRGrabInteractable))]
+    [RequireComponent(typeof(ItemBehaviour))]
     public class ItemInputRouter : MonoBehaviour
     {
+        public InputActionProperty[] primaries = new InputActionProperty[2];
+        public InputActionProperty[] secondaries = new InputActionProperty[2];
+
         private XRGrabInteractable grab;
         private ItemBehaviour behaviour;
 
         private XRBaseInteractor currentInteractor;
         private ActionBasedController controller;
 
-        void Awake()
+        private void Awake()
         {
             grab = GetComponent<XRGrabInteractable>();
             behaviour = GetComponent<ItemBehaviour>();
 
             grab.selectEntered.AddListener(OnGrab);
             grab.selectExited.AddListener(OnRelease);
-            
+
             grab.activated.AddListener(OnActivate);
+
+            Array.ForEach(primaries, iap => iap.action.performed += OnPrimary);
+            Array.ForEach(secondaries, iap => iap.action.performed += OnSecondary);
         }
 
-        void OnGrab(SelectEnterEventArgs args)
+        private void OnDestroy()
+        {
+            Array.ForEach(primaries, iap => iap.action.performed -= OnPrimary);
+            Array.ForEach(secondaries, iap => iap.action.performed -= OnSecondary);
+        }
+
+        private void OnGrab(SelectEnterEventArgs args)
         {
             currentInteractor = args.interactorObject as XRBaseInteractor;
-            Debug.Log("OnGrab");
-            Debug.Log(currentInteractor.transform.parent.name);
-            
+
             if (currentInteractor == null) return;
-            
-            controller = currentInteractor.GetComponent<ActionBasedController>();
-            
+
+            Debug.Log("OnGrab");
+
+            controller = currentInteractor.transform.parent.GetComponent<ActionBasedController>();
+
             Debug.Log(controller);
         }
 
-        void OnRelease(SelectExitEventArgs args)
+        private void OnRelease(SelectExitEventArgs args)
         {
             currentInteractor = null;
         }
 
-        public void OnActivate(ActivateEventArgs args)
+        private void OnActivate(ActivateEventArgs args)
         {
             behaviour.onTrigger();
         }
 
-        // void Update()
-        // {
-        //     if (currentInteractor == null || behaviour == null) return;
-        //     
-        //
-        //     if (controller == null) return;
-        //     
-        //     controller.
-        //
-        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out bool trigger))
-        //     {
-        //         if (trigger) behaviour.onTrigger();
-        //     }
-        //
-        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out bool a))
-        //     {
-        //         if (a) behaviour.onPrimary();
-        //     }
-        //
-        //     if (controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool b))
-        //     {
-        //         if (b) behaviour.onSecondary();
-        //     }
-        // }
+        private bool deviceMatching(InputAction.CallbackContext context)
+        {
+            if (controller == null) return false;
+            Debug.Log(controller);
+            return context.action.activeControl.device == controller.positionAction.action.activeControl.device;
+        }
+
+        private void OnPrimary(InputAction.CallbackContext context)
+        {
+            if (!deviceMatching(context)) return;
+
+            Debug.Log("OnPrimary");
+
+            behaviour.onPrimary();
+        }
+
+        private void OnSecondary(InputAction.CallbackContext context)
+        {
+            if (!deviceMatching(context)) return;
+
+            Debug.Log("OnSecondary");
+
+            behaviour.onSecondary();
+        }
     }
 }
