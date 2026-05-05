@@ -99,7 +99,7 @@
         "CAS",
         "PRA",
         "GRP",
-        "SON"
+        "SEN"
       ]
     },
     {
@@ -113,7 +113,7 @@
         "ONT",
         "NEW",
         "DIX",
-        "SON",
+        "SEN",
         "MEX"
       ]
     },
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "id": "SON",
+      "id": "SEN",
       "name": "Sonora",
       "continent": "NAM",
       "adjacencies": [
@@ -157,7 +157,7 @@
       "continent": "NAM",
       "adjacencies": [
         "ANT",
-        "SON",
+        "SEN",
         "GRP",
         "DIX",
         "CEN"
@@ -221,6 +221,17 @@
       ]
     },
     {
+      "id": "PAT",
+      "name": "Patagonia",
+      "continent": "SAM",
+      "adjacencies": [
+        "ANT",
+        "PRU",
+        "AMA",
+        "BRA"
+      ]
+    },
+    {
       "id": "AMA",
       "name": "Amazonia",
       "continent": "SAM",
@@ -241,7 +252,7 @@
         "ANT",
         "AMA",
         "BRA",
-        "GUI"
+        "WES"
       ]
     },
     {
@@ -293,7 +304,7 @@
       ]
     },
     {
-      "id": "GBR",
+      "id": "GRB",
       "name": "British Isles",
       "continent": "EUR",
       "adjacencies": [
@@ -304,12 +315,23 @@
       ]
     },
     {
+      "id": "BEN",
+      "name": "Benelux",
+      "continent": "EUR",
+      "adjacencies": [
+        "ANT",
+        "FRA",
+        "GRB",
+        "GER"
+      ]
+    },
+    {
       "id": "FRA",
       "name": "France",
       "continent": "EUR",
       "adjacencies": [
         "ANT",
-        "GBR",
+        "GRB",
         "BEN",
         "GER",
         "ITA",
@@ -424,11 +446,11 @@
         "MOR",
         "EGY",
         "CAM",
-        "GUI"
+        "WES"
       ]
     },
     {
-      "id": "GUI",
+      "id": "WES",
       "name": "Guinea",
       "continent": "AFR",
       "adjacencies": [
@@ -445,7 +467,7 @@
       "continent": "AFR",
       "adjacencies": [
         "ANT",
-        "GUI",
+        "WES",
         "SUD",
         "TUN",
         "CON"
