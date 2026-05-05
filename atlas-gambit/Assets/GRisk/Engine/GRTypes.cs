@@ -4,18 +4,18 @@ namespace GRisk.Engine
     {
         public enum Player : uint
         {
-            NONE = 0,
-            PLAYER = 1,
-            ENTITY = 666
+            NONE = 0, // Territoires neutres
+            PLAYER = 1, // Territoires du joueur
+            ENTITY = 666 // Territoires de l'IA
         }
 
         public enum Phase : uint
         {
-            ITEMS = 0,
-            REINFORCE = 1,
-            ATTACK = 2,
+            ITEMS = 0, // Obtenir des bonus
+            REINFORCE = 1, // Mouvement de troupes
+            ATTACK = 2, // Attaque
             LAST = ATTACK,
-            END = 4
+            END = 4 // Fin
         }
     }
 }

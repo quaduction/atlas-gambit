@@ -14,6 +14,7 @@ namespace GRisk.Engine
         int currentPlayerIndex;
         int currentPhaseIndex;
 
+        // Initialiser les provinces
         public GR()
         {
             foreach (string id in GRData.territoryDict.Keys)
@@ -26,6 +27,7 @@ namespace GRisk.Engine
             }
         }
 
+        // Initialiser les joueurs
         public void registerPlayer(uint playerId)
         {
             if (playerId == (uint)GRTypes.Player.NONE)
@@ -47,6 +49,8 @@ namespace GRisk.Engine
             return (GRTypes.Phase)currentPhaseIndex;
         }
 
+        // Prochaine phase de tour
+        // Les phases sont contenus dans un tour.
         public bool nextPhase()
         {
             if (currentPhaseIndex < (int)GRTypes.Phase.END) currentPhaseIndex++;
@@ -55,6 +59,8 @@ namespace GRisk.Engine
             return currentPhaseIndex == (int)GRTypes.Phase.END;
         }
 
+        // Prochain tour
+        // Les tours sont par joueur.
         public void nextTurn()
         {
             currentPhaseIndex = 0;
@@ -65,6 +71,7 @@ namespace GRisk.Engine
             currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
         }
 
+        // Adjacences de provinces (de territories.json)
         bool tilesAdjacent(string fromId, string toId)
         {
             TerritoryData data = GRData.territoryDict[fromId];
@@ -75,6 +82,7 @@ namespace GRisk.Engine
             return data.adjacencies.Contains(toId);
         }
 
+        // Provinces bidirectionnels
         bool tilesAdjacentBidirectional(string fromId, string toId)
         {
             return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
@@ -85,16 +93,19 @@ namespace GRisk.Engine
             return boardState[id];
         }
 
+        // [UTIL] Retourner le nombre de troupes sur une province
         public uint manpowerAt(string id)
         {
             return stateAt(id)[0];
         }
 
+        // [UTIL] Retourner le propriétaire d'une province
         public uint ownerAt(string id)
         {
             return stateAt(id)[1];
         }
 
+        // [UTIL] Définir le propriétaire d'une province
         uint setOwnerAt(string id, uint owner)
         {
             return stateAt(id)[1] = owner;
@@ -106,6 +117,7 @@ namespace GRisk.Engine
                 setOwnerAt(id, 0);
         }
 
+        // [UTIL] Définir le nombre de troupes sur une province.
         uint setManpowerAt(string id, uint manpower)
         {
             stateAt(id)[0] = manpower;
@@ -115,6 +127,8 @@ namespace GRisk.Engine
             return manpower;
         }
 
+        // [UTIL] Ajouter nombre de troupes sur une province. 
+        // ID de la province + nombre de troupes à ajouter
         uint addManpowerAt(string id, uint manpower)
         {
             uint current = manpowerAt(id);
@@ -126,6 +140,7 @@ namespace GRisk.Engine
             return added;
         }
 
+        // [UTIL] Soustraire le nombre de troupes
         uint subManpowerAt(string id, uint manpower)
         {
             uint current = manpowerAt(id);
@@ -136,16 +151,23 @@ namespace GRisk.Engine
             return removed;
         }
 
+        // [UTIL] Bouger des troupes d'une province à une autre
+        // ID de la province de départ, ID de la province de destination, nombre de troupes
         uint moveManpower(string fromId, string toId, uint manpower)
         {
             return addManpowerAt(toId, subManpowerAt(fromId, manpower));
         }
 
+        // Ajouter des troupes pour un joueur
+        // ID de la province + nombre de troupes à ajouter, joueur
         public uint draft(string id, uint manpower, uint player)
         {
             return addManpowerAt(id, manpower);
         }
 
+        // Check pour mouvement de troupes
+        // ID de la province de départ, ID de la province de destination, nombre de troupes, joueur
+        // Si la phase est REINFORCE (mouvement) et les provinces sont adjacentes du même joueur.
         public bool canReinforce(string fromId, string toId, uint manpower, uint player)
         {
             return currentPhaseIndex == (int)GRTypes.Phase.REINFORCE
@@ -155,6 +177,8 @@ namespace GRisk.Engine
                    && manpowerAt(fromId) >= manpower;
         }
 
+        // Mouvement de troupes
+        // ID de la province de départ, ID de la province de destination, nombre de troupes, joueur
         public uint reinforce(string fromId, string toId, uint manpower, uint player)
         {
             if (!canReinforce(fromId, toId, manpower, player))
@@ -163,6 +187,9 @@ namespace GRisk.Engine
             return moveManpower(fromId, toId, manpower);
         }
 
+        // Check pour attaque
+        // ID de la province de départ, ID de la province de destination, nombre de troupes, joueur
+        // Si la phase est ATTACK (attaque) et les provinces sont adjacentes de joueurs différents.
         public bool canAttack(string fromId, string toId, uint manpower, uint player)
         {
             return currentPhaseIndex == (int)GRTypes.Phase.ATTACK
@@ -172,6 +199,9 @@ namespace GRisk.Engine
                    && manpowerAt(fromId) >= manpower;
         }
 
+        // Attaque
+        // Simule une escarmouche pour calculer les pertes de troupes
+        // ID de la province de départ, ID de la province de destination, nombre de troupes, joueur
         public uint attack(string fromId, string toId, uint manpower, uint player)
         {
             if (!canAttack(fromId, toId, manpower, player))
