@@ -118,8 +118,10 @@ namespace GRisk.Interface
 
         public void updateVisuals()
         {
-            GRThings.ownerColorize(renderer, owner, focused ? 1.4f : 1f);
-            GRThings.ownerColorize(tokenRenderer, owner, 0.6f);
+            float brighten = focused ? 0.4f : 0f;
+
+            GRThings.ownerColorize(renderer, owner, 1f + brighten);
+            GRThings.ownerColorize(tokenRenderer, owner, 0.6f + brighten);
 
             token.setValue(manpower);
         }
