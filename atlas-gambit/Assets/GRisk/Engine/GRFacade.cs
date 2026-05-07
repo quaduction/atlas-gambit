@@ -15,7 +15,7 @@ namespace GRisk.Engine
 
         public bool handleConsumable(ConsumableItem consumable, string territoryId)
         {
-            consumable.territoryEffect(territoryId, engine);
+            consumable.territoryEffect(this, territoryId);
 
             if (consumable.checkOwnership && (uint)consumable.owner != engine.ownerAt(territoryId)) return false;
 

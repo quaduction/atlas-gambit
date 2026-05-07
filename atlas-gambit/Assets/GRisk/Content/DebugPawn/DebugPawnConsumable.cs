@@ -5,11 +5,11 @@ namespace GRisk.Content.DebugPawn
 {
     public class DebugPawnConsumable : ConsumableItem
     {
-        public override void territoryEffect(string territoryId, GR engine)
+        public override void territoryEffect(GRFacade facade, string territoryId)
         {
-            if ((uint)GRTypes.Player.NONE == engine.ownerAt(territoryId))
+            if ((uint)GRTypes.Player.NONE == facade.engine.ownerAt(territoryId))
             {
-                engine.setOwnerAt(territoryId, (uint)owner);
+                facade.engine.setOwnerAt(territoryId, (uint)owner);
             }
         }
     }

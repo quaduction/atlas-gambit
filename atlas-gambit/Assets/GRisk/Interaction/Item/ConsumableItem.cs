@@ -28,7 +28,7 @@ namespace GRisk.Interaction.Item
         }
         
         // runs after TileManager focus checks but before GRFacade ownership checks
-        public virtual void territoryEffect(string territoryId, GR engine)
+        public virtual void territoryEffect(GRFacade facade, string territoryId)
         {
         }
     }
