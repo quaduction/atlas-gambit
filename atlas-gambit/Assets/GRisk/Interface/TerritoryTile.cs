@@ -80,10 +80,9 @@ namespace GRisk.Interface
 
         private void collide(GameObject detectedObject)
         {
-            if (detectedObject.TryGetComponent(out ConsumableItem consumable))
-            {
-                manager.onConsumable(this, consumable);
-            }
+            ConsumableItem consumable = detectedObject.GetComponentInParent<ConsumableItem>();
+            
+            if (consumable != null) manager.onConsumable(this, consumable);
         }
 
         private void OnCollisionEnter(Collision collision)
