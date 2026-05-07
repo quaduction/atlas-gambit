@@ -1,3 +1,4 @@
+using GRisk.Data;
 using GRisk.Engine;
 using GRisk.Interface;
 using UnityEngine;
@@ -16,6 +17,9 @@ namespace GRisk
             facade.engine = engine;
             tileManager.engine = engine;
             tileManager.facade = facade;
+            
+            foreach (PlayerStyleData playerStyle in GRData.playerStyleData.playerStyleData)
+                engine.registerPlayer(playerStyle.id);
         }
     }
 }
