@@ -1,6 +1,7 @@
 using System;
 using GRisk.Data;
 using GRisk.Interaction.Item;
+using GRisk.Interface;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,7 @@ namespace GRisk.Engine
     public class GRFacade : MonoBehaviour
     {
         public GR engine;
+        public Notifier notifier;
 
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange = new();
@@ -33,7 +35,7 @@ namespace GRisk.Engine
             uint[] state = engine.stateAt(id);
             TerritoryData territory = GRData.territoryDict[id];
 
-            Debug.Log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp");
+            notifier.log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp");
         }
 
         public void nextPhase()
@@ -41,12 +43,12 @@ namespace GRisk.Engine
             bool endPhase = engine.nextPhase();
             if (endPhase)
             {
-                Debug.Log($"End phase! Player {engine.currentPlayer()}'s turn is over.");
+                notifier.log($"End phase! Player {engine.currentPlayer()}'s turn is over.");
                 nextTurn();
             }
             else
             {
-                Debug.Log($"{engine.currentPhase().ToString()} phase");
+                notifier.log($"{engine.currentPhase().ToString()} phase");
             }
 
             phaseChange.Invoke();
@@ -57,7 +59,7 @@ namespace GRisk.Engine
             engine.nextTurn();
             turnChange.Invoke();
 
-            Debug.Log($"It is now player {engine.currentPlayer()}'s turn");
+            notifier.log($"It is now player {engine.currentPlayer()}'s turn");
         }
 
         public void draft(string id, uint manpower)
@@ -73,7 +75,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.REINFORCE:
                     if (!engine.canReinforce(fromId, toId, manpower, player))
                     {
-                        Debug.Log("Invalid REINFORCE move (position, ownership, or manpower)");
+                        notifier.log("Invalid REINFORCE move (position, ownership, or manpower)");
                         break;
                     }
 
@@ -83,7 +85,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.ATTACK:
                     if (!engine.canAttack(fromId, toId, manpower, player))
                     {
-                        Debug.Log("Invalid ATTACK move (position, ownership, or manpower)");
+                        notifier.log("Invalid ATTACK move (position, ownership, or manpower)");
                         break;
                     }
 
@@ -91,7 +93,7 @@ namespace GRisk.Engine
                     break;
 
                 default:
-                    Debug.Log("Can't move outside of REINFORCE or ATTACK");
+                    notifier.log("Can't move outside of REINFORCE or ATTACK");
                     break;
             }
         }
