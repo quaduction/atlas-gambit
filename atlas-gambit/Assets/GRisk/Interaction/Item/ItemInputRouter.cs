@@ -27,6 +27,7 @@ namespace GRisk.Interaction.Item
             grab.selectExited.AddListener(OnRelease);
 
             grab.activated.AddListener(OnActivate);
+            grab.deactivated.AddListener(OnDeactivate);
 
             Array.ForEach(primaries, iap => iap.action.performed += OnPrimary);
             Array.ForEach(secondaries, iap => iap.action.performed += OnSecondary);
@@ -59,6 +60,11 @@ namespace GRisk.Interaction.Item
         private void OnActivate(ActivateEventArgs args)
         {
             behaviour.onTrigger();
+        }
+
+        private void OnDeactivate(DeactivateEventArgs args)
+        {
+            behaviour.offTrigger();
         }
 
         private bool deviceMatching(InputAction.CallbackContext context)
