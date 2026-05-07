@@ -12,6 +12,7 @@ namespace GRisk.Interface
         public List<TerritoryTile> tiles = new();
 
         private ConsumableItem focuser;
+        private bool holdingFocus = false;
         private bool focusLocked = false;
 
         public void registerTile(TerritoryTile tile)
@@ -33,8 +34,6 @@ namespace GRisk.Interface
 
         public void unfocusTiles()
         {
-            focusLocked = false;
-
             foreach (TerritoryTile tile in tiles) tile.setFocus(false);
 
             updateTiles();
@@ -48,16 +47,40 @@ namespace GRisk.Interface
             tile.setFocus(true);
         }
 
+        public void releaseFocus()
+        {
+            focusLocked = false;
+            holdingFocus = false;
+            focuser = null;
+            
+            unfocusTiles();
+        }
+
         public void onConsumable(TerritoryTile tile, ConsumableItem consumable)
         {
             if (consumable.consumed) return;
 
-            if (focusLocked && !(tile.getFocus() /*|| consumable == focuser*/)) return;
+            if (holdingFocus)
+            {
+                bool startFocusLocked = focusLocked; // in case the secondary focus effect stops focus (e.g. grabber) 
+                bool sameFocuser = consumable == focuser;
+                bool sameTile = tile.getFocus();
+                
+                if(sameFocuser && !sameTile)
+                {
+                    consumable.secondaryFocusEffect(facade, tile.territoryId);
+                    updateTiles();
+                }
+                
+                if (startFocusLocked) return;
+            }
 
             if (consumable.applyFocus)
             {
                 focusTile(tile);
-                consumable.focus = tile;
+                holdingFocus = true;
+                focuser = consumable;
+                consumable.focusedTile = tile;
 
                 if (consumable.focusLock) focusLocked = true;
             }
