@@ -51,6 +51,9 @@ namespace GRisk.Interaction.Item
         private void OnRelease(SelectExitEventArgs args)
         {
             currentInteractor = null;
+
+            // run off behaviours to prevent stuck states
+            behaviour.offTrigger();
         }
 
         private void OnActivate(ActivateEventArgs args)
