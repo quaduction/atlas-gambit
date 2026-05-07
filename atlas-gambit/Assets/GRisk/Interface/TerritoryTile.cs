@@ -60,9 +60,17 @@ namespace GRisk.Interface
             updateVisuals();
         }
 
+        public bool getFocus()
+        {
+            return focused;
+        }
+
         public void updateVisuals()
         {
-            renderer.material.color = GRData.playerStyleDict[owner].color;
+            GRThings.ownerColorize(renderer, owner, focused ? 1.4f : 1f);
+            GRThings.ownerColorize(tokenRenderer, owner, 0.6f);
+
+            token.setValue(manpower);
         }
     }
 }

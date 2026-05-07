@@ -151,6 +151,15 @@ namespace GRisk.Engine
             return removed;
         }
 
+        public uint mutManpowerAt(string id, int manpower)
+        {
+            return (
+                Math.Sign(manpower) >= 0
+                    ? (Func<string, uint, uint>)addManpowerAt
+                    : subManpowerAt
+            )(id, (uint)Math.Abs(manpower));
+        }
+
         // [UTIL] Bouger des troupes d'une province à une autre
         // ID de la province de départ, ID de la province de destination, nombre de troupes
         uint moveManpower(string fromId, string toId, uint manpower)

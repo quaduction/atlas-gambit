@@ -13,31 +13,16 @@ namespace GRisk.Engine
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange = new();
 
-        public void handleConsumable(ConsumableItem consumable, string territoryId)
+        public bool handleConsumable(ConsumableItem consumable, string territoryId)
         {
-            if (consumable.destroyOnConsume && consumable.consumed) return;
-            
             consumable.territoryEffect(territoryId, engine);
 
-            if (consumable.checkOwnership && (uint)consumable.owner != engine.ownerAt(territoryId)) return;
+            if (consumable.checkOwnership && (uint)consumable.owner != engine.ownerAt(territoryId)) return false;
 
             if (consumable.attributes.manpowerMut != 0)
-            {
-                if (Math.Sign(consumable.attributes.manpowerMut) > 0)
-                {
-                    engine.addManpowerAt(territoryId, (uint)consumable.attributes.manpowerMut);
-                }
-                else
-                {
-                    engine.subManpowerAt(territoryId, (uint)consumable.attributes.manpowerMut);
-                }
-            }
-            
-            if(consumable.destroyOnConsume)
-            {
-                consumable.consumed = true;
-                Destroy(consumable.gameObject);
-            }
+                engine.mutManpowerAt(territoryId, consumable.attributes.manpowerMut);
+
+            return true;
         }
 
 
