@@ -10,9 +10,9 @@ namespace GRisk.Engine
     {
         private Dictionary<string, uint[]> boardState = new();
 
-        List<uint> players;
-        int currentPlayerIndex;
-        int currentPhaseIndex;
+        List<uint> players = new();
+        int currentPlayerIndex = 0;
+        int currentPhaseIndex = 0;
 
         // Initialiser les provinces
         public GR()
