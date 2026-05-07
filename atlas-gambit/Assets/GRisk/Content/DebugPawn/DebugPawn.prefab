@@ -86,6 +86,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8694443577492876879, guid: d6e4ac2b350a29f47b1cdafa58d68334, type: 3}
     - {fileID: 6631457145124898637, guid: d6e4ac2b350a29f47b1cdafa58d68334, type: 3}
+    - {fileID: 4971832920720954659, guid: d6e4ac2b350a29f47b1cdafa58d68334, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -212,9 +213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fd3e80432d46a99aa1cad62bcefe77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attributes:
+    manpowerMut: 10
   destroyOnConsume: 1
   consumed: 0
   checkOwnership: 1
   owner: 1
-  attributes:
-    manpowerMut: 0
+  applyFocus: 0
+  focusLock: 0
+  focus: {fileID: 0}

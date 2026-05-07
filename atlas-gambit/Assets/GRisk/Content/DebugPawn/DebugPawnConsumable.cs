@@ -1,5 +1,4 @@
-﻿using GRisk.Data;
-using GRisk.Engine;
+﻿using GRisk.Engine;
 using GRisk.Interaction.Item;
 
 namespace GRisk.Content.DebugPawn
