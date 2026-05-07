@@ -20,8 +20,6 @@ namespace GRisk.Data
             
             playerStyleData = JLoader<PlayerStyleDataList>.load("playerstyles");
             playerStyleDict = playerStyleData.asDict();
-            
-            Debug.Log(playerStyleDict);
         }
     }
 }

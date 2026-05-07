@@ -45,11 +45,7 @@ namespace GRisk.Interaction.Item
 
             if (currentInteractor == null) return;
 
-            Debug.Log("OnGrab");
-
             controller = currentInteractor.transform.parent.GetComponent<ActionBasedController>();
-
-            Debug.Log(controller);
         }
 
         private void OnRelease(SelectExitEventArgs args)
@@ -70,7 +66,7 @@ namespace GRisk.Interaction.Item
         private bool deviceMatching(InputAction.CallbackContext context)
         {
             if (controller == null) return false;
-            Debug.Log(controller);
+
             return context.action.activeControl.device == controller.positionAction.action.activeControl.device;
         }
 
