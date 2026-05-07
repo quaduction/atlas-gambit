@@ -216,11 +216,25 @@ namespace GRisk.Engine
             if (!canAttack(fromId, toId, manpower, player))
                 return 0;
 
-            uint[] outcome = GRMath.skirmish(manpower, manpowerAt(toId));
+            uint[] outcome = GRMath.skirmish(subManpowerAt(fromId, manpower), manpowerAt(toId));
             uint remainder = outcome[0];
             uint captureType = outcome[1];
 
-            return 0;
+            // TODO better captureType logic
+            
+            switch (captureType)
+            {
+                case 0u: // attacker win
+                    setOwnerAt(toId, player);
+                    break;
+                case 1u: // defender win
+                    break;
+                case 2u:
+                    setOwnerAt(toId, (uint)GRTypes.Player.NONE);
+                    break;
+            }
+
+            return remainder;
         }
     }
 }
