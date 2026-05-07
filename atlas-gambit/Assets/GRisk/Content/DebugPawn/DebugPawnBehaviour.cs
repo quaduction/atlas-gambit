@@ -21,8 +21,6 @@ namespace GRisk.Content.DebugPawn
 
         public override void onSecondary()
         {
-            Debug.Log("pawn");
-            
             consumable.owner = consumable.owner == GRTypes.Player.PLAYER ? GRTypes.Player.ENTITY : GRTypes.Player.PLAYER;
             
             updateColor();
