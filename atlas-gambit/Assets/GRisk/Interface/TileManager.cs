@@ -79,6 +79,8 @@ namespace GRisk.Interface
 
             if (consumable.applyFocus)
             {
+                facade.check(tile.territoryId); // for seeing through the Notifier
+                
                 focusTile(tile);
                 holdingFocus = true;
                 focuser = consumable;
