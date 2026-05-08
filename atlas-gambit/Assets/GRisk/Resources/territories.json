@@ -414,18 +414,6 @@
       ]
     },
     {
-      "id": "BAL",
-      "name": "Balkans",
-      "continent": "EUR",
-      "adjacencies": [
-        "ANT",
-        "UKR",
-        "GER",
-        "ITA",
-        "TUR"
-      ]
-    },
-    {
       "id": "MOR",
       "name": "Western Maghreb",
       "continent": "AFR",
@@ -553,7 +541,8 @@
       "adjacencies": [
         "ANT",
         "ANG",
-        "MAD"
+        "MAD",
+        "MOZ"
       ]
     },
     {
