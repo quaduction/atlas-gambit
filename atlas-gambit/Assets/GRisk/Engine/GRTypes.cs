@@ -15,7 +15,7 @@ namespace GRisk.Engine
             REINFORCE = 1, // Mouvement de troupes
             ATTACK = 2, // Attaque
             LAST = ATTACK,
-            END = 4 // Fin
+            END = 3 // Fin
         }
     }
 }
