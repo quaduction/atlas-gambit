@@ -85,7 +85,7 @@ namespace GRisk.Engine
         // Provinces bidirectionnels
         bool tilesAdjacentBidirectional(string fromId, string toId)
         {
-            return tilesAdjacent(fromId, toId) && tilesAdjacent(toId, fromId);
+            return tilesAdjacent(fromId, toId) || tilesAdjacent(toId, fromId);
         }
 
         public uint[] stateAt(string id)
@@ -180,7 +180,7 @@ namespace GRisk.Engine
         public bool canReinforce(string fromId, string toId, uint manpower, uint player)
         {
             return currentPhaseIndex == (int)GRTypes.Phase.REINFORCE
-                   && tilesAdjacent(fromId, toId)
+                   && tilesAdjacentBidirectional(fromId, toId)
                    && ownerAt(fromId) == ownerAt(toId)
                    && ownerAt(fromId) == player
                    && manpowerAt(fromId) >= manpower;
@@ -202,7 +202,7 @@ namespace GRisk.Engine
         public bool canAttack(string fromId, string toId, uint manpower, uint player)
         {
             return currentPhaseIndex == (int)GRTypes.Phase.ATTACK
-                   && tilesAdjacent(fromId, toId)
+                   && tilesAdjacentBidirectional(fromId, toId)
                    && ownerAt(fromId) == player
                    && ownerAt(toId) != player
                    && manpowerAt(fromId) >= manpower;
