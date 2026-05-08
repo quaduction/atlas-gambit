@@ -218,23 +218,13 @@ namespace GRisk.Engine
 
             uint[] outcome = GRMath.skirmish(subManpowerAt(fromId, manpower), manpowerAt(toId));
             uint remainder = outcome[0];
-            uint captureType = outcome[1];
-
-            // TODO better captureType logic
+            bool wins = outcome[1] == 1u;
             
-            switch (captureType)
-            {
-                case 0u: // attacker win
-                    setOwnerAt(toId, player);
-                    break;
-                case 1u: // defender win
-                    break;
-                case 2u:
-                    setOwnerAt(toId, (uint)GRTypes.Player.NONE);
-                    break;
-            }
+            if(wins) setOwnerAt(toId, player);
 
-            return remainder;
+            setManpowerAt(toId, remainder);
+
+            return wins ? remainder : 0u;
         }
     }
 }

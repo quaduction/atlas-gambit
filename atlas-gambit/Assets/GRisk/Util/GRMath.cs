@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using Random = System.Random;
 
 namespace GRisk.Util
 {
@@ -90,15 +92,14 @@ namespace GRisk.Util
             bool wins = effectiveAtk > defManpower;
 
             uint effectiveOutcome = difference(effectiveAtk, defManpower);
-            uint remainder = wins ? scaleFrom(effectiveOutcome, advantage) : effectiveOutcome;
-
-            bool captures = remainder > 0;
-            uint captureMode = wins && captures
-                ? 0u // wins and captures: attacker win
-                : captures
-                    ? 2u // wins and doesn't capture: mutual destruction
-                    : 1u; // doesn't win and doesn't capture: defender win
-
+            uint remainder = wins 
+                ? scaleFrom(effectiveOutcome, advantage) // remainder belongs to attacker
+                : effectiveOutcome; // remainder belongs to defender
+            
+            uint captureMode = wins
+                ? 1u // attacker win
+                : 0u; // defender win
+            
             return new[]
             {
                 remainder,
