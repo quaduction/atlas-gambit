@@ -59,6 +59,8 @@ namespace GRisk.Interface
         public void onConsumable(TerritoryTile tile, ConsumableItem consumable)
         {
             if (consumable.consumed) return;
+            
+            if(consumable.itemPhaseLocked && facade.engine.currentPhase() != GRTypes.Phase.ITEMS) return;
 
             if (holdingFocus)
             {

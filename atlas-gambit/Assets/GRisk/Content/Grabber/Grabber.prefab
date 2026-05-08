@@ -262,6 +262,7 @@ MonoBehaviour:
   consumed: 0
   checkOwnership: 1
   owner: 1
+  itemPhaseLocked: 0
   applyFocus: 0
   focusLock: 1
   focusedTile: {fileID: 0}

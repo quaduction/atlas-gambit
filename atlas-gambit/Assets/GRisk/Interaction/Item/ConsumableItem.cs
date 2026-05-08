@@ -15,6 +15,8 @@ namespace GRisk.Interaction.Item
         public bool checkOwnership = true;
         public GRTypes.Player owner;
 
+        public bool itemPhaseLocked = true;
+
         public bool applyFocus = false;
         public bool focusLock = false;
         [CanBeNull] public TerritoryTile focusedTile;
