@@ -27,9 +27,6 @@ namespace GRisk.Engine
             return true;
         }
 
-
-        // older debug stuff for console testing
-
         public void check(string id)
         {
             uint[] state = engine.stateAt(id);
