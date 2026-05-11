@@ -93,6 +93,8 @@ namespace GRisk.Interface
                 consumable.focusedTile = tile;
 
                 if (consumable.focusLock) focusLocked = true;
+
+                consumable.focusEffect(facade, tile.territoryId);
             }
 
             bool consumed = facade.handleConsumable(consumable, tile.territoryId);

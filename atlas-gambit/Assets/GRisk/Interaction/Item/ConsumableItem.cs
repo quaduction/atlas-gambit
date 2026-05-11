@@ -34,6 +34,11 @@ namespace GRisk.Interaction.Item
         {
         }
 
+        // runs if the ConsumableItem causes a new focus in the TileManager
+        public virtual void focusEffect(GRFacade facade, string territoryId)
+        {
+        }
+
         // runs if the TileManager is holding focus from this same ConsumableItem when it touches a non-focused tile.
         // this happens regardless of focus lock.
         public virtual void secondaryFocusEffect(GRFacade facade, string territoryId)
