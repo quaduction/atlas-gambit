@@ -11,6 +11,8 @@ namespace GRisk.Engine
     {
         public GR engine;
         public Notifier notifier;
+        public GRSound soundPlayer;
+        public TileManager tileManager;
 
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange = new();
@@ -73,6 +75,7 @@ namespace GRisk.Engine
                     if (!engine.canReinforce(fromId, toId, manpower, player))
                     {
                         notifier.log("Invalid REINFORCE move (position, ownership, or manpower)");
+                        deny(fromId);
                         break;
                     }
 
@@ -83,6 +86,7 @@ namespace GRisk.Engine
                     if (!engine.canAttack(fromId, toId, manpower, player))
                     {
                         notifier.log("Invalid ATTACK move (position, ownership, or manpower)");
+                        deny(fromId);
                         break;
                     }
 
@@ -91,8 +95,15 @@ namespace GRisk.Engine
 
                 default:
                     notifier.log("Can't move outside of REINFORCE or ATTACK");
+                    deny(fromId);
                     break;
             }
+        }
+        
+        // feedback
+        private void deny(string sourceId)
+        {
+            soundPlayer.playsound("ping-nope", tileManager.firstTileFor(sourceId).transform);
         }
     }
 }
