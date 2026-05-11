@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GRisk.Engine;
 using GRisk.Interaction.Item;
 using UnityEngine;
@@ -52,35 +53,40 @@ namespace GRisk.Interface
             focusLocked = false;
             holdingFocus = false;
             focuser = null;
-            
+
             unfocusTiles();
+        }
+
+        public TerritoryTile firstTileFor(string territoryId)
+        {
+            return tiles.FirstOrDefault(tile => tile.territoryId == territoryId);
         }
 
         public void onConsumable(TerritoryTile tile, ConsumableItem consumable)
         {
             if (consumable.consumed) return;
-            
-            if(consumable.itemPhaseLocked && facade.engine.currentPhase() != GRTypes.Phase.ITEMS) return;
+
+            if (consumable.itemPhaseLocked && facade.engine.currentPhase() != GRTypes.Phase.ITEMS) return;
 
             if (holdingFocus)
             {
                 bool startFocusLocked = focusLocked; // in case the secondary focus effect stops focus (e.g. grabber) 
                 bool sameFocuser = consumable == focuser;
                 bool sameTile = tile.getFocus();
-                
-                if(sameFocuser && !sameTile)
+
+                if (sameFocuser && !sameTile)
                 {
                     consumable.secondaryFocusEffect(facade, tile.territoryId);
                     updateTiles();
                 }
-                
+
                 if (startFocusLocked) return;
             }
 
             if (consumable.applyFocus)
             {
                 facade.check(tile.territoryId); // for seeing through the Notifier
-                
+
                 focusTile(tile);
                 holdingFocus = true;
                 focuser = consumable;
