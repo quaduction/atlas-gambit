@@ -10,9 +10,14 @@ namespace GRisk.Content.Grabber
         public GrabberConsumable head;
         public TMP_Text moveAmountLabel;
 
-        public uint moveAmount = 0u;
+        public uint moveAmount = 10u;
         public uint moveIncrement = 10u;
 
+
+        private void Start()
+        {
+            updateMoveAmount();
+        }
 
         public override void onTrigger()
         {
@@ -27,15 +32,15 @@ namespace GRisk.Content.Grabber
 
         public override void onPrimary()
         {
-            moveAmount += moveIncrement;
+            if (moveAmount < moveIncrement) return;
+
+            moveAmount -= moveIncrement;
             updateMoveAmount();
         }
 
         public override void onSecondary()
         {
-            if (moveAmount < moveIncrement) return;
-
-            moveAmount -= moveIncrement;
+            moveAmount += moveIncrement;
             updateMoveAmount();
         }
 
