@@ -34,7 +34,7 @@ namespace GRisk.Engine
             uint[] state = engine.stateAt(id);
             TerritoryData territory = GRData.territoryDict[id];
 
-            notifier.log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp");
+            log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp", id);
         }
 
         public void nextPhase()
@@ -49,8 +49,9 @@ namespace GRisk.Engine
             {
                 notifier.log($"{engine.currentPhase().ToString()} phase");
             }
-
+            
             phaseChange.Invoke();
+            soundPlayer.playsound("ping-squelch", gameObject.transform);
         }
 
         public void nextTurn()
@@ -74,7 +75,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.REINFORCE:
                     if (!engine.canReinforce(fromId, toId, manpower, player))
                     {
-                        notifier.log("Invalid REINFORCE move (position, ownership, or manpower)");
+                        log("Invalid REINFORCE move (position, ownership, or manpower)", toId);
                         deny(fromId);
                         break;
                     }
@@ -85,7 +86,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.ATTACK:
                     if (!engine.canAttack(fromId, toId, manpower, player))
                     {
-                        notifier.log("Invalid ATTACK move (position, ownership, or manpower)");
+                        log("Invalid ATTACK move (position, ownership, or manpower)", toId);
                         deny(fromId);
                         break;
                     }
@@ -94,13 +95,19 @@ namespace GRisk.Engine
                     break;
 
                 default:
-                    notifier.log("Can't move outside of REINFORCE or ATTACK");
+                    log("Can't move outside of REINFORCE or ATTACK", toId);
                     deny(fromId);
                     break;
             }
         }
         
         // feedback
+        
+        private void log(string msg, string sourceId)
+        {
+            notifier.extraLog(msg, tileManager.firstTileFor(sourceId).transform);
+        }
+        
         private void deny(string sourceId)
         {
             soundPlayer.playsound("ping-nope", tileManager.firstTileFor(sourceId).transform);

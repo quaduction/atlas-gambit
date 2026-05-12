@@ -38,5 +38,11 @@ namespace GRisk.Interface
             
             update();
         }
+
+        public void extraLog(string msg, Transform origin)
+        {
+            log(msg);
+            FountainNotification.spawn(msg, origin);
+        }
     }
 }
