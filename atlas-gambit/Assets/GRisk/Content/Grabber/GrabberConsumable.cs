@@ -14,6 +14,11 @@ namespace GRisk.Content.Grabber
             focusLock = true;
         }
 
+        public override void focusEffect(GRFacade facade, string territoryId)
+        {
+            facade.soundPlayer.playsound("ping-squelch", gameObject.transform);
+        }
+
         public override void secondaryFocusEffect(GRFacade facade, string territoryId)
         {
             if (focusedTile == null) return;

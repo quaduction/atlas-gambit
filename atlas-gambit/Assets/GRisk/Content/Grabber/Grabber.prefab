@@ -792,7 +792,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head: {fileID: 4712968679815912406}
   moveAmountLabel: {fileID: 955255839282853491}
-  moveAmount: 0
+  soundPlayer: {fileID: 0}
+  moveAmount: 10
   moveIncrement: 10
 --- !u!4 &9163579081158669866 stripped
 Transform:

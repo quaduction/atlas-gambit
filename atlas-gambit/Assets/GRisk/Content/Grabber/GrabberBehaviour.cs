@@ -9,6 +9,7 @@ namespace GRisk.Content.Grabber
     {
         public GrabberConsumable head;
         public TMP_Text moveAmountLabel;
+        public GRSound soundPlayer;
 
         public uint moveAmount = 10u;
         public uint moveIncrement = 10u;
@@ -28,6 +29,8 @@ namespace GRisk.Content.Grabber
         {
             head.applyFocus = false;
             head.releaseFocus();
+            
+            soundPlayer.playsound("drag-select", gameObject.transform, 2.0f);
         }
 
         public override void onPrimary()
