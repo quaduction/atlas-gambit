@@ -16,6 +16,7 @@ namespace GRisk.Engine
 
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange = new();
+        public UnityEvent winCondition = new();
 
         public bool handleConsumable(ConsumableItem consumable, string territoryId)
         {
@@ -49,7 +50,7 @@ namespace GRisk.Engine
             {
                 notifier.log($"{engine.currentPhase().ToString()} phase");
             }
-            
+
             phaseChange.Invoke();
             soundPlayer.playsound("ping-squelch", gameObject.transform);
         }
@@ -77,7 +78,7 @@ namespace GRisk.Engine
                     {
                         log("Invalid REINFORCE move (position, ownership, or manpower)", toId);
                         deny(fromId);
-                        break;
+                        return;
                     }
 
                     engine.reinforce(fromId, toId, manpower, player);
@@ -88,10 +89,19 @@ namespace GRisk.Engine
                     {
                         log("Invalid ATTACK move (position, ownership, or manpower)", toId);
                         deny(fromId);
-                        break;
+                        return;
                     }
 
                     engine.attack(fromId, toId, manpower, player);
+                    soundPlayer.playsound("ping-attack", tileManager.firstTileFor(toId).transform);
+
+                    if (engine.winCondition((uint)GRTypes.Player.PLAYER))
+                    {
+                        log("WOOOOOOOO YOU WINNNN", toId);
+                        winCondition.Invoke();
+                        return;
+                    }
+
                     break;
 
                 default:
@@ -99,15 +109,17 @@ namespace GRisk.Engine
                     deny(fromId);
                     break;
             }
+            
+            check(toId);
         }
-        
+
         // feedback
-        
+
         private void log(string msg, string sourceId)
         {
             notifier.extraLog(msg, tileManager.firstTileFor(sourceId).transform);
         }
-        
+
         private void deny(string sourceId)
         {
             soundPlayer.playsound("ping-nope", tileManager.firstTileFor(sourceId).transform);

@@ -174,6 +174,17 @@ namespace GRisk.Engine
             return addManpowerAt(id, manpower);
         }
 
+        public bool winCondition(uint player)
+        {
+            bool wins = true;
+
+            foreach (string id in boardState.Keys)
+                if (ownerAt(id) != player && ownerAt(id) != (uint)GRTypes.Player.NONE)
+                    wins = false;
+
+            return wins;
+        }
+
         // Check pour mouvement de troupes
         // ID de la province de départ, ID de la province de destination, nombre de troupes, joueur
         // Si la phase est REINFORCE (mouvement) et les provinces sont adjacentes du même joueur.
@@ -219,8 +230,8 @@ namespace GRisk.Engine
             uint[] outcome = GRMath.skirmish(subManpowerAt(fromId, manpower), manpowerAt(toId));
             uint remainder = outcome[0];
             bool wins = outcome[1] == 1u;
-            
-            if(wins) setOwnerAt(toId, player);
+
+            if (wins) setOwnerAt(toId, player);
 
             setManpowerAt(toId, remainder);
 
