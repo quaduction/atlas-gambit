@@ -45,12 +45,12 @@ namespace GRisk.Engine
             bool endPhase = engine.nextPhase();
             if (endPhase)
             {
-                notifier.log($"End phase! Player {engine.currentPlayer()}'s turn is over.");
+                notifier.log($"Fin de phases! Le tour de joueur #{engine.currentPlayer()} est fini");
                 nextTurn();
             }
             else
             {
-                notifier.log($"{engine.currentPhase().ToString()} phase");
+                notifier.log($"Phase de {engine.currentPhase().ToString()}");
             }
 
             phaseChange.Invoke();
@@ -61,8 +61,10 @@ namespace GRisk.Engine
         {
             engine.nextTurn();
             turnChange.Invoke();
+            
+            tileManager.updateTiles();
 
-            notifier.log($"It is now player {engine.currentPlayer()}'s turn");
+            notifier.log($"Tour de joueur #{engine.currentPlayer()}");
         }
 
         public void draft(string id, uint manpower)
@@ -78,18 +80,24 @@ namespace GRisk.Engine
                 case GRTypes.Phase.REINFORCE:
                     if (!engine.canReinforce(fromId, toId, manpower, player))
                     {
-                        log("Invalid REINFORCE move", toId);
+                        if (engine.currentPlayer() == (uint)GRTypes.Player.ENTITY) return;
+                        
+                        log("Mouvement REINFORCE invalide", toId);
                         deny(fromId);
                         return;
                     }
 
                     engine.reinforce(fromId, toId, manpower, player);
+                    soundPlayer.playsound("marching", tileManager.firstTileFor(toId).transform);
+                    
                     break;
 
                 case GRTypes.Phase.ATTACK:
                     if (!engine.canAttack(fromId, toId, manpower, player))
                     {
-                        log("Invalid ATTACK move", toId);
+                        if (engine.currentPlayer() == (uint)GRTypes.Player.ENTITY) return;
+                        
+                        log("Mouvement ATTACK invalide", toId);
                         deny(fromId);
                         return;
                     }
@@ -99,14 +107,14 @@ namespace GRisk.Engine
 
                     if (engine.winCondition((uint)GRTypes.Player.PLAYER))
                     {
-                        log("WOOOOOOOO YOU WINNNN", toId);
+                        log("WOO! Vous avez eradiqué l'entité!", toId);
                         winCondition.Invoke();
                         return;
                     }
 
                     if (engine.winCondition((uint)GRTypes.Player.ENTITY))
                     {
-                        log("you lose :(", toId);
+                        log("Vous êtes morts :(", toId);
                         lossCondition.Invoke();
                         return;
                     }
@@ -114,12 +122,12 @@ namespace GRisk.Engine
                     break;
 
                 default:
-                    log("Can't move outside of REINFORCE or ATTACK", toId);
+                    log("Impossible de bouger hors de REINFORCE ou ATTACK", toId);
                     deny(fromId);
                     return;
             }
             
-            check(toId);
+            // check(toId);
         }
 
         // feedback
@@ -131,6 +139,7 @@ namespace GRisk.Engine
 
         private void deny(string sourceId)
         {
+            if (engine.currentPlayer() == (uint)GRTypes.Player.ENTITY) return;
             soundPlayer.playsound("ping-nope", tileManager.firstTileFor(sourceId).transform);
         }
     }

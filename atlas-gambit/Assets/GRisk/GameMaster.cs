@@ -12,6 +12,7 @@ namespace GRisk
         public GR engine;
         public GRFacade facade;
         public TileManager tileManager;
+        public EntityAI entityAi;
 
         private void Awake()
         {
@@ -19,6 +20,8 @@ namespace GRisk
             facade.engine = engine;
             tileManager.engine = engine;
             tileManager.facade = facade;
+            entityAi.facade = facade;
+            entityAi.engine = engine;
             
             loadScenario("ownership");
         }
