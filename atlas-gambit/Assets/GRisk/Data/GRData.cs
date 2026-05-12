@@ -28,15 +28,10 @@ namespace GRisk.Data
         
         private static void loadSoundAssets()
         {
-            // Load all sounds from the specified "Sounds" resource folder
+            // Load all sounds from the GRisk/Resources/Sounds folder
             AudioClip[] audioClips = Resources.LoadAll<AudioClip>("Sounds");
 
-            foreach (AudioClip clip in audioClips)
-            {
-                // Use the clip's name as the key
-                soundLibrary.Add(clip.name, clip);
-                Debug.Log("Loaded sound: " + clip.name);
-            }
+            foreach (AudioClip clip in audioClips) soundLibrary.Add(clip.name, clip);
         }
     }
 }
