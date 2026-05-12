@@ -35,7 +35,8 @@ namespace GRisk.Engine
             uint[] state = engine.stateAt(id);
             TerritoryData territory = GRData.territoryDict[id];
 
-            log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp", id);
+            // log($"{territory.name} ({territory.id}) held by player {state[1]} with {state[0]} mp", id);
+            log($"{territory.name} ({territory.id})", id);
         }
 
         public void nextPhase()
@@ -76,7 +77,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.REINFORCE:
                     if (!engine.canReinforce(fromId, toId, manpower, player))
                     {
-                        log("Invalid REINFORCE move (position, ownership, or manpower)", toId);
+                        log("Invalid REINFORCE move", toId);
                         deny(fromId);
                         return;
                     }
@@ -87,7 +88,7 @@ namespace GRisk.Engine
                 case GRTypes.Phase.ATTACK:
                     if (!engine.canAttack(fromId, toId, manpower, player))
                     {
-                        log("Invalid ATTACK move (position, ownership, or manpower)", toId);
+                        log("Invalid ATTACK move", toId);
                         deny(fromId);
                         return;
                     }
