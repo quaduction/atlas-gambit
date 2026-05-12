@@ -2934,6 +2934,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardSmall
       objectReference: {fileID: 0}
+    - target: {fileID: 3761411725572391050, guid: 2bffba387b48aa648a2c021a1c6d0531,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3890607220939681642, guid: 2bffba387b48aa648a2c021a1c6d0531,
         type: 3}
       propertyPath: manager
