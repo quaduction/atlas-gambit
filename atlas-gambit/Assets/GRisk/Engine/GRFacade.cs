@@ -17,6 +17,7 @@ namespace GRisk.Engine
         public UnityEvent phaseChange = new();
         public UnityEvent turnChange = new();
         public UnityEvent winCondition = new();
+        public UnityEvent lossCondition = new();
 
         public bool handleConsumable(ConsumableItem consumable, string territoryId)
         {
@@ -103,12 +104,19 @@ namespace GRisk.Engine
                         return;
                     }
 
+                    if (engine.winCondition((uint)GRTypes.Player.ENTITY))
+                    {
+                        log("you lose :(", toId);
+                        lossCondition.Invoke();
+                        return;
+                    }
+
                     break;
 
                 default:
                     log("Can't move outside of REINFORCE or ATTACK", toId);
                     deny(fromId);
-                    break;
+                    return;
             }
             
             check(toId);
