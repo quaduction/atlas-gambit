@@ -1,6 +1,8 @@
 using GRisk.Data;
 using GRisk.Engine;
 using GRisk.Interface;
+using GRisk.Util;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 namespace GRisk
@@ -18,8 +20,26 @@ namespace GRisk
             tileManager.engine = engine;
             tileManager.facade = facade;
             
-            foreach (PlayerStyleData playerStyle in GRData.playerStyleData.playerStyleData)
-                engine.registerPlayer(playerStyle.id);
+            loadScenario("ownership");
+        }
+
+        private void loadScenario(string scenarioName)
+        {
+            ScenarioPlayerData[] scenarioPlayers = JLoader<ScenarioDataList>.load(scenarioName).scenario;
+
+            foreach (ScenarioPlayerData scenarioPlayerData in scenarioPlayers)
+            {
+                uint playerId = scenarioPlayerData.playerId;
+                uint startMp = scenarioPlayerData.startMp;
+                
+                engine.registerPlayer(playerId);
+
+                foreach (string territoryId in scenarioPlayerData.territories)
+                {
+                    engine.setOwnerAt(territoryId, playerId);
+                    engine.setManpowerAt(territoryId, startMp);
+                }
+            }
         }
     }
 }

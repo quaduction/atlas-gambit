@@ -118,7 +118,7 @@ namespace GRisk.Engine
         }
 
         // [UTIL] Définir le nombre de troupes sur une province.
-        uint setManpowerAt(string id, uint manpower)
+        public uint setManpowerAt(string id, uint manpower)
         {
             stateAt(id)[0] = manpower;
 
