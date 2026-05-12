@@ -72,7 +72,7 @@ namespace GRisk.Engine
         }
 
         // Adjacences de provinces (de territories.json)
-        bool tilesAdjacent(string fromId, string toId)
+        public bool tilesAdjacent(string fromId, string toId)
         {
             TerritoryData data = GRData.territoryDict[fromId];
 
@@ -83,7 +83,7 @@ namespace GRisk.Engine
         }
 
         // Provinces bidirectionnels
-        bool tilesAdjacentBidirectional(string fromId, string toId)
+        public bool tilesAdjacentBidirectional(string fromId, string toId)
         {
             return tilesAdjacent(fromId, toId) || tilesAdjacent(toId, fromId);
         }
@@ -164,7 +164,11 @@ namespace GRisk.Engine
         // ID de la province de départ, ID de la province de destination, nombre de troupes
         uint moveManpower(string fromId, string toId, uint manpower)
         {
-            return addManpowerAt(toId, subManpowerAt(fromId, manpower));
+            uint realMp = manpowerAt(fromId);
+            
+            uint finalMp = realMp < manpower ? realMp : manpower;
+            
+            return addManpowerAt(toId, subManpowerAt(fromId, finalMp));
         }
 
         // Ajouter des troupes pour un joueur
@@ -193,8 +197,8 @@ namespace GRisk.Engine
             return currentPhaseIndex == (int)GRTypes.Phase.REINFORCE
                    && tilesAdjacentBidirectional(fromId, toId)
                    && ownerAt(fromId) == ownerAt(toId)
-                   && ownerAt(fromId) == player
-                   && manpowerAt(fromId) >= manpower;
+                   && ownerAt(fromId) == player;
+            // && manpowerAt(fromId) >= manpower;
         }
 
         // Mouvement de troupes
@@ -215,8 +219,8 @@ namespace GRisk.Engine
             return currentPhaseIndex == (int)GRTypes.Phase.ATTACK
                    && tilesAdjacentBidirectional(fromId, toId)
                    && ownerAt(fromId) == player
-                   && ownerAt(toId) != player
-                   && manpowerAt(fromId) >= manpower;
+                   && ownerAt(toId) != player;
+            // && manpowerAt(fromId) >= manpower;
         }
 
         // Attaque

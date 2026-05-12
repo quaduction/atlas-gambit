@@ -5,13 +5,6 @@ namespace GRisk.Interface
 {
     public class GRSound : MonoBehaviour
     {
-        private AudioSource soundSource; 
-        
-        private void Awake()
-        {
-            soundSource = GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
-        }
-
         public void playsound(string name, Transform location, float volume = 1.0f)
         {
             if (!GRData.soundLibrary.ContainsKey(name))
@@ -21,16 +14,25 @@ namespace GRisk.Interface
             }
 
             AudioClip clip = GRData.soundLibrary[name];
-            
-            soundSource.volume = volume;
-            soundSource.spatialBlend = 0.8f; 
-            
-            Vector3 originalPosition = transform.position;
-            transform.position = location.position;
-            
-            soundSource.PlayOneShot(clip);
-            
-            transform.position = originalPosition;
+
+            playClipAtPoint(clip, location.position, volume);
+        }
+
+        private static void playClipAtPoint(AudioClip clip, Vector3 position, float volume = 1.0f,
+            float spatialBlend = 0.95f)
+        {
+            // ripped from AudioSource.PlayClipAtPoint with some modifications
+
+            GameObject gameObject = new("One shot audio");
+            gameObject.transform.position = position;
+
+            AudioSource audioSource = (AudioSource)gameObject.AddComponent(typeof(AudioSource));
+            audioSource.clip = clip;
+            audioSource.spatialBlend = spatialBlend;
+            audioSource.volume = volume;
+            audioSource.Play();
+
+            Destroy(gameObject, clip.length * (Time.timeScale < 0.009999999776482582 ? 0.01f : Time.timeScale));
         }
     }
 }

@@ -59,7 +59,9 @@ namespace GRisk.Interface
 
         public TerritoryTile firstTileFor(string territoryId)
         {
-            return tiles.FirstOrDefault(tile => tile.territoryId == territoryId);
+            TerritoryTile found = tiles.FirstOrDefault(tile => tile.territoryId == territoryId);
+            
+            return found == null ? tiles[0] : found;
         }
 
         public void onConsumable(TerritoryTile tile, ConsumableItem consumable)

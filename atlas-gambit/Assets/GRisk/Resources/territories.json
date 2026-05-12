@@ -1,11 +1,11 @@
 {
   "territories": [
     {
-      "id": "ANT",
+      "id": "NOTANT",
       "name": "Shadowrealm",
       "continent": "ANT",
       "adjacencies": [
-        "*"
+        ""
       ]
     },
     {

@@ -25,7 +25,7 @@ namespace GRisk.Interface
 
         private void update()
         {
-            board.SetText($"Player: {facade.engine.currentPlayer()}\n" +
+            board.SetText($"Joueur: {facade.engine.currentPlayer()}\n" +
                           $"Phase: {facade.engine.currentPhase().ToString()}\n\n\n" +
                           $"> {string.Join("\n >", logs)}");
         }
